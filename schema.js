@@ -11,6 +11,7 @@ export default `
     name: String!
     public: Boolean!
     messages: [Message!]!
+    users: [User!]!
   }
 
   type Message {
