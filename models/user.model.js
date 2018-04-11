@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => {
       unique: true,
     },
     password: DataTypes.STRING,
-  }, { underscored: true });
+  });
   
   User.associate = (models) => {
     User.belongsToMany(models.Team, {

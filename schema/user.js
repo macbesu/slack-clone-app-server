@@ -1,5 +1,4 @@
 export default `
-
   type Team {
     owner: User!
     members: [User!]!
@@ -27,8 +26,4 @@ export default `
     email: String!
     team: [Team!]!
   }
-
-  type Query {
-    hi: String,
-  }
- `;
+`;
