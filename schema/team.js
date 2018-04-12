@@ -4,4 +4,8 @@ export default `
     members: [User!]!
     channels: [Channel!]!
   }
+
+  type Mutation {
+    createTeam(name: String!): Boolean!
+  }
 `;
