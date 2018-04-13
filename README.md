@@ -10,7 +10,7 @@ slack-clone-app implemented by PostgreSQL and GraphQL
 Follow the commands listed below.
 
 ```bash
-$ git clone git@github.com:ivanchean/slack-clone-app-server.git
+$ git clone git@github.com:ivanchean/slack-clone-app-server.git && cd slack-clone-app-server
 $ npm install
 $ npm start 
 ```
