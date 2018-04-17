@@ -1,3 +1,5 @@
+import { hashSync, compareSync } from 'bcrypt-nodejs';
+
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     username: {
@@ -24,7 +26,22 @@ export default (sequelize, DataTypes) => {
         },
       },
     },
-    password: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        len: {
+          args: [5, 100],
+          msg: 'The password needs to be between 5 and 100 character',
+        },
+      },
+    },
+  }, {
+    hooks: {
+      afterValidate: async (user) => {
+        const hashedPassword = await hashSync(user.password);
+        user.password = hashedPassword;
+      },
+    }
   });
   
   User.associate = (models) => {
