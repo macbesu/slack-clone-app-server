@@ -1,15 +1,5 @@
-import { hashSync, compareSync } from 'bcrypt-nodejs';
-import _ from 'lodash'; 
-
 import { tryLogin } from '../auth';
-
-const formatErrors = (e, models) => {
-  if (e instanceof models.sequelize.ValidationError) { // errors in models' validations 
-    // _.pick({ a: 1, b: 2 }, 'a') => { a: 1 }
-    return e.errors.map(x => _.pick(x, ['path', 'message']));
-  }
-  return [{ path: 'name', message: 'something went wrong' }];
-}
+import formatErrors from '../utils/formatErrors';
 
 export default {
   Query: {
