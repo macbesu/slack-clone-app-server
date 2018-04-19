@@ -2,7 +2,7 @@ import formatErrors from '../utils/formatErrors';
 
 export default {
   Mutation: {
-    createTeam: async (parent, args, { models }) => {
+    createTeam: async (parent, args, { models, user }) => {
       try {
         await models.Team.create({ ...args, owner: user.id });
         return {
