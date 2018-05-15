@@ -60,6 +60,6 @@ app.use(graphqlEndpoint, bodyParser.json(), graphqlExpress(req => ({
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
 
-models.sequelize.sync({}).then((x) => {
+models.sequelize.sync({ force: true }).then((x) => {
   app.listen(4000);
 });
