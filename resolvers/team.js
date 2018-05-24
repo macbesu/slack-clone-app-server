@@ -32,13 +32,13 @@ export default {
         console.log(err);
         return {
           ok: false,
-          errors: formatErrors(err),
+          errors: formatErrors(err, models),
         };
       }
     }),
     createTeam: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
-        const res = await models.sequelize.transaction(async () => {
+        const res = models.sequelize.transaction(async () => {
           const team = await models.Team.create({ ...args, owner: user.id });
           await models.Channel.create({ name: 'general', public: true, teamId: team.id });
           return team;
