@@ -8,7 +8,6 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { createServer } from 'http';
 import { execute, subscribe } from 'graphql';
-import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 
 import models from './models';
@@ -27,7 +26,8 @@ const schema = makeExecutableSchema({
 });
 
 const app = express();
-app.use(cors('http://localhost:3001')); //app.use(cors('*'));
+
+app.use(cors('*')); //app.use(cors('http://localhost:3001'))
 
 const addUser = async (req, res, next) => {
   const token = req.headers['x-token'];
@@ -71,13 +71,13 @@ app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
 
 const server = createServer(app);
 
-models.sequelize.sync({}).then(() => {
+models.sequelize.sync().then(() => {
   server.listen(8081, () => {
     new SubscriptionServer(
       {
         execute,
         subscribe,
-        schema
+        schema,
       },
       {
         server,
