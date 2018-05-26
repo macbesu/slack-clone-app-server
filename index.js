@@ -5,6 +5,11 @@ import { makeExecutableSchema } from 'graphql-tools';
 import path from 'path';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import { createServer } from 'http';
+import { execute, subscribe } from 'graphql';
+import { PubSub } from 'graphql-subscriptions';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 
 import models from './models';
 import { refreshTokens } from './auth';
@@ -48,18 +53,37 @@ app.use(addUser);
 
 const graphqlEndpoint = '/graphql';
 
-app.use(graphqlEndpoint, bodyParser.json(), graphqlExpress(req => ({ 
-  schema,
-  context: {
-    models,
-    user: req.user,
-    SECRET,
-    SECRET2,
-  },
-})));
+app.use(
+  graphqlEndpoint,
+  bodyParser.json(),
+  graphqlExpress(req => ({ 
+    schema,
+    context: {
+      models,
+      user: req.user,
+      SECRET,
+      SECRET2,
+    },
+  }))
+);
 
 app.use('/graphiql', graphiqlExpress({ endpointURL: graphqlEndpoint }));
 
-models.sequelize.sync({}).then((x) => {
-  app.listen(4000);
+const server = createServer(app);
+
+models.sequelize.sync({}).then(() => {
+  server.listen(8081, () => {
+    new SubscriptionServer(
+      {
+        execute,
+        subscribe,
+        schema
+      },
+      {
+        server,
+        path: '/subscriptions',
+      },
+    );
+  });
 });
+
