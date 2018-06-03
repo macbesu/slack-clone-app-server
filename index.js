@@ -98,11 +98,11 @@ models.sequelize.sync().then(() => {
               throw new Error('Invaid auth tokens');
             }
 
-            const member = await models.Member.findOne({ where: { teamId: 1, userId: user.id } });
+            // const member = await models.Member.findOne({ where: { teamId: 1, userId: user.id } });
 
-            if (!member) {
-              throw new Error('Missing auth tokens!');
-            }
+            // if (!member) {
+            //   throw new Error('Missing auth tokens!');
+            // }
 
             return true;
           }
