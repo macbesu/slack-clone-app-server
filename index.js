@@ -84,6 +84,31 @@ models.sequelize.sync().then(() => {
         execute,
         subscribe,
         schema,
+        onConnect: async ({ token, refreshToken }, webSocket) => {
+          if (token && refreshToken) {
+            let user = null;
+            try {
+              const payload = jwt.verify(token, SECRET);
+              user = payload.user;
+            } catch (err) {
+              const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2);
+              user = newTokens.user;
+            }
+            if (!user) {
+              throw new Error('Invaid auth tokens');
+            }
+
+            const member = await models.Member.findOne({ where: { teamId: 1, userId: user.id } });
+
+            if (!member) {
+              throw new Error('Missing auth tokens!');
+            }
+
+            return true;
+          }
+
+          throw new Error('Missing auth tokens!');
+        },
       },
       {
         server,
