@@ -17,5 +17,3 @@ $ git clone git@github.com:ivanchean/slack-clone-app-server.git && cd slack-clon
 $ npm install
 $ npm start 
 ```
-
- 
